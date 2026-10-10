@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f4f0e8">
+  <meta name="description" content="A calm drag-and-drop task board that saves to data.json.">
+  <title>Taskflow — JSON task board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Taskflow home"><span class="brand-mark"
+          aria-hidden="true"><i></i><i></i><i></i></span><span>taskflow</span></a>
+      <div class="top-actions">
+        <button class="button button-quiet" id="loadButton" type="button"><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14" />
+          </svg>Load JSON</button>
+        <button class="button button-dark" id="saveButton" type="button"><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 3h11l3 3v15H5V3Zm3 0v6h8V3M8 21v-7h8v7" />
+          </svg>Save data.json</button>
+        <input id="fileInput" type="file" accept="application/json,.json" hidden>
+      </div>
+    </header>
+    <main>
+      <section class="hero" aria-labelledby="pageTitle">
+        <div>
+          <p class="eyebrow">Personal workspace <span id="saveState">Saved locally</span></p>
+          <h1 id="pageTitle">Make room for<br><em>what matters.</em></h1>
+        </div>
+        <div class="hero-side">
+          <p>Move work forward with a board that stays out of your way. Drag a card to change its status.</p><button
+            class="new-task" id="newTaskButton" type="button"><span>+</span> Add a task</button>
+        </div>
+      </section>
+      <section class="summary" aria-label="Board summary">
+        <p><span class="pulse"></span><strong id="totalCount">0</strong> tasks in motion</p>
+        <p id="progressText">Nothing completed yet</p>
+      </section>
+      <section class="board" id="board" aria-label="Task board"></section>
+    </main>
+    <footer>
+      <p>Drag to organize · Click to edit</p>
+      <p>Your work stays in this browser until you export it.</p>
+    </footer>
+  </div>
+  <dialog id="taskDialog">
+    <form id="taskForm" method="dialog">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow" id="dialogKicker">New task</p>
+          <h2 id="dialogTitle">Add to your board</h2>
+        </div><button class="icon-button" id="closeDialog" type="button" aria-label="Close">×</button>
+      </div>
+      <label><span>Task ID</span>
+        <div class="id-row"><input id="taskId" name="id" maxlength="32" required autocomplete="off"><button
+            id="regenerateId" type="button" aria-label="Generate a new ID">↻</button></div>
+      </label>
+      <label><span>Title</span><input id="taskTitle" name="title" maxlength="80" placeholder="What needs doing?"
+          required autofocus></label>
+      <label><span>Description</span><textarea id="taskDescription" name="description" maxlength="280" rows="4"
+          placeholder="Add a little context…"></textarea></label>
+      <label><span>Status</span><select id="taskStatus" name="status">
+          <option value="todo">To do</option>
+          <option value="progress">In progress</option>
+          <option value="done">Done</option>
+        </select></label>
+      <p class="form-error" id="formError" role="alert"></p>
+      <div class="dialog-actions"><button class="delete-button" id="deleteTask" type="button">Delete
+          task</button><span></span><button class="button button-quiet" id="cancelTask"
+          type="button">Cancel</button><button class="button button-dark" type="submit">Save task</button></div>
+    </form>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+
+</html>

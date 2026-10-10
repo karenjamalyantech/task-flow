@@ -1,2 +1,5 @@
-# task-flow
-A clean, responsive drag-and-drop task board built with vanilla JavaScript. Create, edit, delete, and organize tasks by status, with automatic browser storage and JSON
+# Taskflow
+
+A dependency-free drag-and-drop task board. Each task contains only an `id`, `title`, `description`, and `status`.
+
+Open `dist/index.html` in a browser, or serve the `dist` folder with any static HTTP server. The app keeps a local browser copy and can save/load a `data.json` file.

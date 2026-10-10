@@ -1,0 +1,620 @@
+:root {
+    --paper: #f4f0e8;
+    --ink: #1c211d;
+    --muted: #6f746d;
+    --line: #d8d3c9;
+    --card: #fbf9f4;
+    --lime: #c7f36b;
+    --shadow: 0 18px 60px rgba(39, 41, 32, .11)
+}
+
+* {
+    box-sizing: border-box
+}
+
+body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Manrope", sans-serif
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit
+}
+
+button {
+    color: inherit
+}
+
+.app-shell {
+    width: min(1480px, 100%);
+    margin: auto;
+    padding: 0 42px
+}
+
+.topbar {
+    height: 88px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line)
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: inherit;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -.04em
+}
+
+.brand-mark {
+    width: 27px;
+    height: 27px;
+    display: grid;
+    gap: 3px;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: end;
+    transform: rotate(-8deg)
+}
+
+.brand-mark i {
+    display: block;
+    background: var(--ink);
+    border-radius: 2px
+}
+
+.brand-mark i:nth-child(1) {
+    height: 12px
+}
+
+.brand-mark i:nth-child(2) {
+    height: 21px
+}
+
+.brand-mark i:nth-child(3) {
+    height: 16px
+}
+
+.top-actions {
+    display: flex;
+    gap: 10px
+}
+
+.button {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 11px 17px;
+    display: inline-flex;
+    gap: 9px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    transition: .18s
+}
+
+.button:hover {
+    transform: translateY(-2px)
+}
+
+.button svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round
+}
+
+.button-quiet {
+    background: rgba(255, 255, 255, .35)
+}
+
+.button-dark {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff
+}
+
+.hero {
+    padding: 75px 0 54px;
+    display: grid;
+    grid-template-columns: 1.35fr .65fr;
+    gap: 80px;
+    align-items: end
+}
+
+.eyebrow {
+    margin: 0 0 20px;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+    color: var(--muted)
+}
+
+.eyebrow span {
+    margin-left: 11px;
+    color: #49730d
+}
+
+h1 {
+    margin: 0;
+    font-size: clamp(54px, 7.4vw, 110px);
+    line-height: .86;
+    letter-spacing: -.075em;
+    font-weight: 600
+}
+
+h1 em {
+    font-family: Georgia, serif;
+    font-weight: 400
+}
+
+.hero-side {
+    max-width: 440px;
+    justify-self: end
+}
+
+.hero-side p {
+    margin: 0 0 28px;
+    color: var(--muted);
+    line-height: 1.7;
+    font-size: 15px
+}
+
+.new-task {
+    border: 0;
+    background: transparent;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    cursor: pointer;
+    font-weight: 700
+}
+
+.new-task span {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--lime);
+    font-size: 25px;
+    font-weight: 400;
+    transition: .2s
+}
+
+.new-task:hover span {
+    transform: rotate(90deg)
+}
+
+.summary {
+    display: flex;
+    justify-content: space-between;
+    border-block: 1px solid var(--line);
+    padding: 14px 2px;
+    font-family: "DM Mono", monospace;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-size: 10px;
+    color: var(--muted)
+}
+
+.summary p {
+    margin: 0
+}
+
+.summary strong {
+    color: var(--ink)
+}
+
+.pulse {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: var(--lime);
+    box-shadow: 0 0 0 4px rgba(199, 243, 107, .24)
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    padding: 28px 0 80px;
+    align-items: start
+}
+
+.column {
+    min-height: 410px;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    padding: 15px;
+    transition: .2s
+}
+
+.column.drag-over {
+    background: rgba(255, 255, 255, .38);
+    border-color: var(--ink)
+}
+
+.column-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 5px 18px
+}
+
+.column-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13px;
+    font-weight: 700
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--accent)
+}
+
+.count {
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    color: var(--muted)
+}
+
+.card-list {
+    min-height: 320px;
+    display: grid;
+    gap: 10px;
+    align-content: start
+}
+
+.empty {
+    border: 1px dashed var(--line);
+    border-radius: 13px;
+    min-height: 115px;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 20px;
+    color: #9a9c96;
+    font-size: 12px;
+    line-height: 1.55
+}
+
+.task-card {
+    position: relative;
+    background: var(--card);
+    border: 1px solid rgba(28, 33, 29, .08);
+    border-radius: 13px;
+    padding: 19px;
+    cursor: grab;
+    box-shadow: 0 2px 0 rgba(28, 33, 29, .04);
+    transition: .2s
+}
+
+.task-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(40, 39, 31, .09)
+}
+
+.task-card:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px
+}
+
+.task-card.dragging {
+    opacity: .42;
+    transform: rotate(2deg)
+}
+
+.task-card:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 18px;
+    bottom: 18px;
+    width: 3px;
+    border-radius: 0 2px 2px 0;
+    background: var(--accent)
+}
+
+.card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px
+}
+
+.task-id {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .04em
+}
+
+.grip {
+    color: #aaaca6;
+    letter-spacing: 2px;
+    font-size: 13px
+}
+
+.task-card h3 {
+    margin: 0 0 8px;
+    font-size: 15px;
+    line-height: 1.35;
+    letter-spacing: -.02em
+}
+
+.task-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere
+}
+
+footer {
+    border-top: 1px solid var(--line);
+    padding: 22px 0 32px;
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 11px
+}
+
+footer p {
+    margin: 0
+}
+
+dialog {
+    width: min(560px, calc(100% - 32px));
+    border: 0;
+    padding: 0;
+    border-radius: 20px;
+    background: var(--card);
+    color: var(--ink);
+    box-shadow: var(--shadow)
+}
+
+dialog::backdrop {
+    background: rgba(25, 28, 24, .42);
+    backdrop-filter: blur(4px)
+}
+
+dialog form {
+    padding: 28px
+}
+
+.dialog-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 26px
+}
+
+.dialog-head .eyebrow {
+    margin-bottom: 7px
+}
+
+.dialog-head h2 {
+    margin: 0;
+    font-size: 28px;
+    letter-spacing: -.05em
+}
+
+.icon-button {
+    border: 0;
+    background: #ece9e1;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 22px;
+    cursor: pointer
+}
+
+label {
+    display: grid;
+    gap: 7px;
+    margin-top: 17px
+}
+
+label>span {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted)
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--ink);
+    padding: 12px 13px;
+    outline: 0
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--ink);
+    box-shadow: 0 0 0 3px rgba(28, 33, 29, .08)
+}
+
+textarea {
+    resize: vertical
+}
+
+.id-row {
+    display: grid;
+    grid-template-columns: 1fr 44px;
+    gap: 8px
+}
+
+.id-row button {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 20px
+}
+
+.form-error {
+    color: #a13925;
+    min-height: 18px;
+    margin: 8px 0 0;
+    font-size: 12px
+}
+
+.dialog-actions {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: 9px
+}
+
+.delete-button {
+    border: 0;
+    padding: 8px 0;
+    background: transparent;
+    color: #a13925;
+    font-size: 12px;
+    cursor: pointer
+}
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 25px;
+    z-index: 10;
+    transform: translate(-50%, 25px);
+    opacity: 0;
+    pointer-events: none;
+    padding: 11px 16px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: #fff;
+    font-size: 12px;
+    transition: .2s
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0)
+}
+
+@media(max-width:850px) {
+    .app-shell {
+        padding: 0 20px
+    }
+
+    .topbar {
+        height: auto;
+        padding: 18px 0;
+        gap: 16px
+    }
+
+    .button {
+        padding: 10px 13px
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+        gap: 34px;
+        padding: 55px 0 42px
+    }
+
+    .hero-side {
+        justify-self: start
+    }
+
+    .board {
+        grid-template-columns: 1fr
+    }
+
+    .column {
+        min-height: 220px
+    }
+
+    .card-list {
+        min-height: 120px
+    }
+}
+
+@media(max-width:560px) {
+    .top-actions .button {
+        font-size: 0;
+        gap: 0;
+        width: 42px;
+        height: 42px;
+        padding: 0
+    }
+
+    .top-actions .button svg {
+        width: 18px;
+        height: 18px
+    }
+
+    h1 {
+        font-size: 52px
+    }
+
+    .summary,
+    footer {
+        gap: 20px;
+        align-items: flex-start
+    }
+
+    .summary p:last-child,
+    footer p:last-child {
+        text-align: right
+    }
+
+    .dialog-actions {
+        grid-template-columns: 1fr 1fr
+    }
+
+    .dialog-actions span {
+        display: none
+    }
+
+    .delete-button {
+        text-align: left
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+
+    *,
+    *:before,
+    *:after {
+        transition: none !important
+    }
+}
