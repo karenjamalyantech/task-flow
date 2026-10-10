@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f4f0e8">
-  <meta name="description" content="A calm drag-and-drop task board that saves to data.json.">
-  <title>Taskflow — JSON task board</title>
+  <meta name="description" content="A calm drag-and-drop task board that saves to data.md.">
+  <title>Taskflow — Markdown task board</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -23,11 +23,11 @@
       <div class="top-actions">
         <button class="button button-quiet" id="loadButton" type="button"><svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14" />
-          </svg>Load JSON</button>
+          </svg>Load Markdown</button>
         <button class="button button-dark" id="saveButton" type="button"><svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M5 3h11l3 3v15H5V3Zm3 0v6h8V3M8 21v-7h8v7" />
-          </svg>Save data.json</button>
-        <input id="fileInput" type="file" accept="application/json,.json" hidden>
+          </svg>Save data.md</button>
+        <input id="fileInput" type="file" accept="text/markdown,.md" hidden>
       </div>
     </header>
     <main>

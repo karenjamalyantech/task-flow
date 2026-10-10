@@ -15,7 +15,7 @@ let fileHandle = null;
 let tasks = readLocalTasks();
 
 function validateTasks(value) {
-  if (!Array.isArray(value)) throw new Error("JSON must contain an array of tasks.");
+  if (!Array.isArray(value)) throw new Error("The file must contain a list of tasks.");
   const ids = new Set();
   return value.map((item, index) => {
     if (!item || typeof item !== "object") throw new Error(`Task ${index + 1} is not valid.`);
@@ -31,6 +31,55 @@ function validateTasks(value) {
     ids.add(task.id);
     return task;
   });
+}
+
+function escapeMarkdownInline(value) {
+  return value.replace(/\\/g, "\\\\").replace(/([*_`\[\]])/g, "\\$1");
+}
+
+function unescapeMarkdownInline(value) {
+  return value.replace(/\\([\\*_`\[\]])/g, "$1");
+}
+
+function escapeMarkdownDescription(value) {
+  return value.replace(/^\\/gm, "\\\\").replace(/^##([ \t])/gm, "\\##$1");
+}
+
+function unescapeMarkdownDescription(value) {
+  return value.replace(/^\\##([ \t])/gm, "##$1").replace(/^\\\\/gm, "\\");
+}
+
+function tasksToMarkdown(value) {
+  const sections = value.map((task) => [
+    `## ${escapeMarkdownInline(task.id)}`,
+    "",
+    `- **Title:** ${escapeMarkdownInline(task.title)}`,
+    `- **Status:** \`${task.status}\``,
+    "",
+    task.description ? escapeMarkdownDescription(task.description) : "_No description._"
+  ].join("\n"));
+  return ["# Taskflow Tasks", ...sections].join("\n\n") + "\n";
+}
+
+function markdownToTasks(markdown) {
+  const source = markdown.replace(/\r\n?/g, "\n");
+  const blocks = [...source.matchAll(/^##[ \t]+(.+?)[ \t]*\n([\s\S]*?)(?=^##[ \t]+|(?![\s\S]))/gm)];
+  if (!blocks.length && source.trim() !== "# Taskflow Tasks") {
+    throw new Error("No tasks were found in this Markdown file.");
+  }
+  return validateTasks(blocks.map((match, index) => {
+    const body = match[2];
+    const titleMatch = body.match(/^[ \t]*-[ \t]+\*\*Title:\*\*[ \t]+(.+?)[ \t]*$/m);
+    const statusMatch = body.match(/^[ \t]*-[ \t]+\*\*Status:\*\*[ \t]+`?([^`\s]+)`?[ \t]*$/m);
+    if (!titleMatch || !statusMatch) throw new Error(`Task ${index + 1} needs a title and status.`);
+    const description = body.slice(statusMatch.index + statusMatch[0].length).trim();
+    return {
+      id: unescapeMarkdownInline(match[1].trim()),
+      title: unescapeMarkdownInline(titleMatch[1].trim()),
+      status: statusMatch[1],
+      description: description === "_No description._" ? "" : unescapeMarkdownDescription(description)
+    };
+  }));
 }
 
 function readLocalTasks() {
@@ -153,18 +202,18 @@ document.querySelector("#regenerateId").addEventListener("click", () => { docume
 dialog.addEventListener("click", (event) => { if (event.target === dialog) closeTask(); });
 
 document.querySelector("#saveButton").addEventListener("click", async () => {
-  const contents = JSON.stringify(tasks, null, 2);
+  const contents = tasksToMarkdown(tasks);
   try {
     if ("showSaveFilePicker" in window) {
-      fileHandle ||= await window.showSaveFilePicker({ suggestedName: "data.json", types: [{ description: "JSON file", accept: { "application/json": [".json"] } }] });
+      fileHandle ||= await window.showSaveFilePicker({ suggestedName: "data.md", types: [{ description: "Markdown file", accept: { "text/markdown": [".md"] } }] });
       const writable = await fileHandle.createWritable();
       await writable.write(contents); await writable.close();
     } else {
       const link = document.createElement("a");
-      link.href = URL.createObjectURL(new Blob([contents], { type: "application/json" }));
-      link.download = "data.json"; link.click(); URL.revokeObjectURL(link.href);
+      link.href = URL.createObjectURL(new Blob([contents], { type: "text/markdown" }));
+      link.download = "data.md"; link.click(); URL.revokeObjectURL(link.href);
     }
-    showToast("Saved data.json");
+    showToast("Saved data.md");
   } catch (error) { if (error.name !== "AbortError") showToast("Could not save the file"); }
 });
 
@@ -173,9 +222,9 @@ fileInput.addEventListener("change", async () => {
   const file = fileInput.files[0];
   if (!file) return;
   try {
-    tasks = validateTasks(JSON.parse(await file.text()));
+    tasks = markdownToTasks(await file.text());
     persist(); render(); showToast(`Loaded ${tasks.length} task${tasks.length === 1 ? "" : "s"}`);
-  } catch (error) { showToast(error.message || "That JSON file is not valid"); }
+  } catch (error) { showToast(error.message || "That Markdown file is not valid"); }
   finally { fileInput.value = ""; }
 });
 
